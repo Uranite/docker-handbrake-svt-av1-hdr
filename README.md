@@ -89,6 +89,7 @@ of modern, widely supported codecs.
 Launch the HandBrake docker container with the following command:
 
 ```shell
+docker build -t handbrake-svt-av1-hdr .
 docker run -d \
     --name=handbrake \
     -p 5800:5800 \
@@ -96,7 +97,7 @@ docker run -d \
     -v /home/user:/storage:ro \
     -v /home/user/HandBrake/watch:/watch:rw \
     -v /home/user/HandBrake/output:/output:rw \
-    jlesage/handbrake
+    handbrake-svt-av1-hdr
 ```
 
 Where:
