@@ -458,6 +458,16 @@ if xx-info is-cross; then
 fi
 patch -d /tmp/handbrake -p1 < "$SCRIPT_DIR"/maximized-window.patch
 
+if [ -d "$SCRIPT_DIR/patches" ]; then
+    log "Applying SVT-AV1-HDR patches..."
+    for patch in "$SCRIPT_DIR"/patches/*.patch; do
+        if [ -f "$patch" ]; then
+            log "Applying patch: $(basename "$patch")"
+            patch -d /tmp/handbrake -p1 < "$patch"
+        fi
+    done
+fi
+
 # Create the meson cross compile config file.
 if xx-info is-cross; then
     cat << EOF > /tmp/handbrake/contrib/cross-config.meson
