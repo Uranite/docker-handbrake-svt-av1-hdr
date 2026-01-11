@@ -5,17 +5,16 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DOCKER_IMAGE_NAME: jlesage/handbrake
+  DOCKER_IMAGE_NAME: uranite/handbrake-svt-av1-hdr
   PLATFORMS: linux/amd64
 
 on:
   push:
     branches:
-      - '*'
-      - '!nightly'
+      - master
     tags:
-      - v[0-9][0-9].[0-9][0-9].[0-9]+
-      - v[0-9][0-9].[0-9][0-9].[0-9]+-pre.[0-9]+
+      - v[0-9]+.[0-9]+.[0-9]+
+      - v[0-9]+.[0-9]+.[0-9]+-pre.[0-9]+
   pull_request:
 
 jobs:
@@ -63,10 +62,12 @@ jobs:
           TAGS="${{ env.DOCKER_IMAGE_NAME }}:${VERSION}"
           if [[ $GITHUB_REF =~ refs/tags/* ]]; then
             TAGS="$TAGS,${{ env.DOCKER_IMAGE_NAME }}:latest"
+          elif [[ $GITHUB_REF == refs/heads/master ]]; then
+            TAGS="$TAGS,${{ env.DOCKER_IMAGE_NAME }}:latest"
           fi
           TAGS="$TAGS,$(echo $TAGS | tr ',' '\n' | sed 's|^|ghcr.io/|' | tr '\n' ',')"
           # Determine the release type.
-          if [[ $GITHUB_REF =~ refs/tags/* ]]; then
+          if [[ $GITHUB_REF =~ refs/tags/* ]] || [[ $GITHUB_REF == refs/heads/master ]]; then
               IS_RELEASE=yes
               if [[ $GITHUB_REF =~ -pre\.[0-9]+ ]]; then
                   RELEASE_TYPE="pre"
@@ -154,7 +155,7 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
-        if: ${{ steps.prep.outputs.release_type == 'standard' }}
+        if: ${{ steps.prep.outputs.release_type == 'standard' || github.ref == 'refs/heads/master' }}
 
       - name: Dockerhub description
         if: ${{ steps.prep.outputs.release_type == 'standard' }}
@@ -164,17 +165,3 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: ${{ env.DOCKER_IMAGE_NAME }}
           readme-filepath: DOCKERHUB.md
-
-  notification:
-    name: Notification
-    needs: [ build ]
-    runs-on: ubuntu-22.04
-    if: ${{ always() && github.event_name != 'pull_request' }}
-
-    steps:
-      - name: Pushover notification
-        uses: desiderati/github-action-pushover@v1
-        with:
-          job-status: ${{ needs.build.result }}
-          pushover-api-token: ${{ secrets.PUSHOVER_API_TOKEN }}
-          pushover-user-key: ${{ secrets.PUSHOVER_USER_KEY }}
