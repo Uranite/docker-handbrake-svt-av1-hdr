@@ -1,9 +1,9 @@
 # Docker container for HandBrake
-[![Release](https://img.shields.io/github/release/jlesage/docker-handbrake.svg?logo=github&style=for-the-badge)](https://github.com/jlesage/docker-handbrake/releases/latest)
-[![Docker Image Size](https://img.shields.io/docker/image-size/jlesage/handbrake/latest?logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake/tags)
-[![Docker Pulls](https://img.shields.io/docker/pulls/jlesage/handbrake?label=Pulls&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake)
-[![Docker Stars](https://img.shields.io/docker/stars/jlesage/handbrake?label=Stars&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/jlesage/docker-handbrake/build-image.yml?logo=github&branch=master&style=for-the-badge)](https://github.com/jlesage/docker-handbrake/actions/workflows/build-image.yml)
+[![Release](https://img.shields.io/github/release/Uranite/docker-handbrake-svt-av1-hdr.svg?logo=github&style=for-the-badge)](https://github.com/Uranite/docker-handbrake-svt-av1-hdr/releases/latest)
+[![Docker Image Size](https://img.shields.io/docker/image-size/uranite/handbrake-svt-av1-hdr/latest?logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr/tags)
+[![Docker Pulls](https://img.shields.io/docker/pulls/uranite/handbrake-svt-av1-hdr?label=Pulls&logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr)
+[![Docker Stars](https://img.shields.io/docker/stars/uranite/handbrake-svt-av1-hdr?label=Stars&logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Uranite/docker-handbrake-svt-av1-hdr/build-image.yml?logo=github&branch=master&style=for-the-badge)](https://github.com/Uranite/docker-handbrake-svt-av1-hdr/actions/workflows/build-image.yml)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge)](https://paypal.me/JocelynLeSage)
 
 This project provides a lightweight and secure Docker container for
@@ -89,7 +89,6 @@ of modern, widely supported codecs.
 Launch the HandBrake docker container with the following command:
 
 ```shell
-docker build -t handbrake-svt-av1-hdr .
 docker run -d \
     --name=handbrake \
     -p 5800:5800 \
@@ -97,7 +96,7 @@ docker run -d \
     -v /home/user:/storage:ro \
     -v /home/user/HandBrake/watch:/watch:rw \
     -v /home/user/HandBrake/output:/output:rw \
-    handbrake-svt-av1-hdr
+    uranite/handbrake-svt-av1-hdr
 ```
 
 Where:
@@ -118,7 +117,7 @@ docker run [-d] \
     [-e <VARIABLE_NAME>=<VALUE>]... \
     [-v <HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]]... \
     [-p <HOST_PORT>:<CONTAINER_PORT>]... \
-    jlesage/handbrake
+    uranite/handbrake-svt-av1-hdr
 ```
 
 | Parameter | Description |
@@ -293,7 +292,7 @@ included in this example.
 ```yaml
 services:
   handbrake:
-    image: jlesage/handbrake
+    image: uranite/handbrake-svt-av1-hdr
     ports:
       - "5800:5800"
     volumes:
@@ -320,8 +319,8 @@ where:
 View all available tags on [Docker Hub] or check the [Releases] page for version
 details.
 
-[Releases]: https://github.com/jlesage/docker-handbrake/releases
-[Docker Hub]: https://hub.docker.com/r/jlesage/handbrake/tags
+[Releases]: https://github.com/Uranite/docker-handbrake-svt-av1-hdr/releases
+[Docker Hub]: https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr/tags
 
 ## Docker Image Update
 
@@ -340,7 +339,7 @@ To manually update the Docker image, follow these steps:
 
   1. Fetch the latest image:
 ```shell
-docker pull jlesage/handbrake
+docker pull uranite/handbrake-svt-av1-hdr
 ```
 
   2. Stop the container:
@@ -364,7 +363,7 @@ For Synology NAS users, follow these steps to update a container image:
 
   1.  Open the *Docker* application.
   2.  Click *Registry* in the left pane.
-  3.  In the search bar, type the name of the container (`jlesage/handbrake`).
+  3.  In the search bar, type the name of the container (`uranite/handbrake-svt-av1-hdr`).
   4.  Select the image, click *Download*, and choose the `latest` tag.
   5.  Wait for the download to complete. A notification will appear once done.
   6.  Click *Container* in the left pane.
@@ -1116,11 +1115,11 @@ To use a nightly build, append the tag to the Docker image name during container
 creation, e.g.:
 
 ```
-docker run [OPTIONS...] jlesage/handbrake:nightly-latest
+docker run [OPTIONS...] uranite/handbrake-svt-av1-hdr:nightly-latest
 ```
 
 [Git repository]: https://github.com/HandBrake/HandBrake
-[Docker Hub]: https://hub.docker.com/r/jlesage/handbrake/tags/
+[Docker Hub]: https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr/tags/
 
 ## Debug Builds
 
@@ -1160,10 +1159,10 @@ available tags on [Docker Hub].
 To use a debug build, append the tag to the Docker image name, e.g.:
 
 ```
-docker run [OPTIONS...] jlesage/handbrake:v1.14.3-debug
+docker run [OPTIONS...] uranite/handbrake-svt-av1-hdr:v1.14.3-debug
 ```
 
-[Docker Hub]: https://hub.docker.com/r/jlesage/handbrake/tags/
+[Docker Hub]: https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr/tags/
 
 ### unRAID
 
@@ -1173,6 +1172,6 @@ On unRAID systems, add the `--ulimit core=-1` parameter to the
 ## Support or Contact
 
 Having troubles with the container or have questions? Please
-[create a new issue](https://github.com/jlesage/docker-handbrake/issues).
+[create a new issue](https://github.com/Uranite/docker-handbrake-svt-av1-hdr/issues).
 
 For other Dockerized applications, visit https://jlesage.github.io/docker-apps.

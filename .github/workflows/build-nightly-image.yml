@@ -5,7 +5,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DOCKER_IMAGE_NAME: jlesage/handbrake
+  DOCKER_IMAGE_NAME: uranite/handbrake-svt-av1-hdr
   PLATFORMS: linux/amd64
 
 on:
@@ -126,24 +126,9 @@ jobs:
             DOCKER_IMAGE_VERSION=${{ needs.prepare.outputs.label_version }}
             HANDBRAKE_VERSION=${{ needs.prepare.outputs.handbrake_version }}
             HANDBRAKE_URL=https://github.com/HandBrake/HandBrake.git
-            HANDBRAKE_DEBUG_MODE=max
           cache-from: type=gha,scope=${{ env.DOCKER_IMAGE_NAME }}-nightly
           cache-to: type=gha,mode=max,scope=${{ env.DOCKER_IMAGE_NAME }}-nightly
 
       - name: Inspect
         run: |
           docker buildx imagetools inspect ${{ env.DOCKER_IMAGE_NAME }}:${{ needs.prepare.outputs.version }}
-
-  notification:
-    name: Notification
-    needs: [ prepare, build ]
-    runs-on: ubuntu-22.04
-    if: ${{ always() && needs.prepare.outputs.build_needed == 'yes' }}
-
-    steps:
-      - name: Pushover notification
-        uses: desiderati/github-action-pushover@v1
-        with:
-          job-status: ${{ needs.build.result }}
-          pushover-api-token: ${{ secrets.PUSHOVER_API_TOKEN }}
-          pushover-user-key: ${{ secrets.PUSHOVER_USER_KEY }}
