@@ -47,7 +47,7 @@ ARG INTEL_MEDIA_SDK_URL
 ARG INTEL_ONEVPL_GPU_RUNTIME_URL
 COPY --from=xx / /
 COPY src/handbrake /build
-RUN /build/build.sh \
+RUN sed -i 's/\r$//' /build/build.sh && /build/build.sh \
     "$HANDBRAKE_VERSION" \
     "$HANDBRAKE_URL" \
     "$HANDBRAKE_DEBUG_MODE" \
@@ -67,7 +67,7 @@ ARG TARGETPLATFORM
 ARG CPU_FEATURES_URL
 COPY --from=xx / /
 COPY src/cpu_features /build
-RUN /build/build.sh "$CPU_FEATURES_URL"
+RUN sed -i 's/\r$//' /build/build.sh && /build/build.sh "$CPU_FEATURES_URL"
 RUN xx-verify /tmp/cpu_features-install/bin/list_cpu_features
 
 # Pull base image.
