@@ -10,7 +10,7 @@ index a63058238..03ac0010c 100644
 -SVT-AV1.FETCH.url    += https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v3.1.2/SVT-AV1-v3.1.2.tar.gz
 -SVT-AV1.FETCH.sha256  = d0d73bfea42fdcc1222272bf2b0e2319e9df5574721298090c3d28315586ecb1
 +SVT-AV1.FETCH.url     = https://github.com/Uranite/HandBrake-SVT-AV1-HDR/releases/download/contribs/svt-av1-hdr.tar.gz
-+SVT-AV1.FETCH.sha256  = fb2b483dcdee97dd2d3b09b5ca3263b797b3cd0da4c1fdf07f3b439e45635bc8
++SVT-AV1.FETCH.sha256  = 99495ad9e11f2b2422e75fa1192b194df716ebf82a67920ec0f7543060643492
  
  SVT-AV1.GCC.args.c_std =
  
