@@ -9,6 +9,9 @@ env:
   PLATFORMS: linux/amd64
 
 on:
+  push:
+    branches:
+      - master
   # Run this workflow once a day.
   schedule:
     - cron: '0 0 * * *'
@@ -97,9 +100,7 @@ jobs:
           echo "::endgroup::"
 
       - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: nightly
+        uses: actions/checkout@v6
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@v2
