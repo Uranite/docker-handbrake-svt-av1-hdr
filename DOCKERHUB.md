@@ -1,10 +1,10 @@
 # Docker container for HandBrake
-[![Release](https://img.shields.io/github/release/jlesage/docker-handbrake.svg?logo=github&style=for-the-badge)](https://github.com/jlesage/docker-handbrake/releases/latest)
-[![Docker Image Size](https://img.shields.io/docker/image-size/jlesage/handbrake/latest?logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake/tags)
-[![Docker Pulls](https://img.shields.io/docker/pulls/jlesage/handbrake?label=Pulls&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake)
-[![Docker Stars](https://img.shields.io/docker/stars/jlesage/handbrake?label=Stars&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/jlesage/docker-handbrake/build-image.yml?logo=github&branch=master&style=for-the-badge)](https://github.com/jlesage/docker-handbrake/actions/workflows/build-image.yml)
-[![Source](https://img.shields.io/badge/Source-GitHub-blue?logo=github&style=for-the-badge)](https://github.com/jlesage/docker-handbrake)
+[![Release](https://img.shields.io/github/release/uranite/docker-handbrake-svt-av1-hdr.svg?logo=github&style=for-the-badge)](https://github.com/uranite/docker-handbrake-svt-av1-hdr/releases/latest)
+[![Docker Image Size](https://img.shields.io/docker/image-size/uranite/handbrake-svt-av1-hdr/latest?logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr/tags)
+[![Docker Pulls](https://img.shields.io/docker/pulls/uranite/handbrake-svt-av1-hdr?label=Pulls&logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr)
+[![Docker Stars](https://img.shields.io/docker/stars/uranite/handbrake-svt-av1-hdr?label=Stars&logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/uranite/docker-handbrake-svt-av1-hdr/build-image.yml?logo=github&branch=master&style=for-the-badge)](https://github.com/uranite/docker-handbrake-svt-av1-hdr/actions/workflows/build-image.yml)
+[![Source](https://img.shields.io/badge/Source-GitHub-blue?logo=github&style=for-the-badge)](https://github.com/uranite/docker-handbrake-svt-av1-hdr)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge)](https://paypal.me/JocelynLeSage)
 
 This project provides a lightweight and secure Docker container for
@@ -48,7 +48,7 @@ docker run -d \
     -v /home/user:/storage:ro \
     -v /home/user/HandBrake/watch:/watch:rw \
     -v /home/user/HandBrake/output:/output:rw \
-    jlesage/handbrake
+    uranite/handbrake-svt-av1-hdr
 ```
 
 Where:
@@ -63,11 +63,11 @@ Files from the host appear under the `/storage` folder in the container.
 
 ## Documentation
 
-Full documentation is available at https://github.com/jlesage/docker-handbrake.
+Full documentation is available at https://github.com/uranite/docker-handbrake-svt-av1-hdr.
 
 ## Support or Contact
 
 Having troubles with the container or have questions? Please
-[create a new issue](https://github.com/jlesage/docker-handbrake/issues).
+[create a new issue](https://github.com/uranite/docker-handbrake-svt-av1-hdr/issues).
 
 For other Dockerized applications, visit https://jlesage.github.io/docker-apps.

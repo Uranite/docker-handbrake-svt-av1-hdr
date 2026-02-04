@@ -308,11 +308,11 @@ app:
           creation, e.g.:
 
           ```
-          docker run [OPTIONS...] jlesage/{{ app.name }}:nightly-latest
+          docker run [OPTIONS...] uranite/{{ app.name }}:nightly-latest
           ```
 
           [Git repository]: https://github.com/HandBrake/HandBrake
-          [Docker Hub]: https://hub.docker.com/r/jlesage/{{ app.name }}/tags/
+          [Docker Hub]: https://hub.docker.com/r/uranite/{{ app.name }}/tags/
       - title: Debug Builds
         level: 2
         content: |-
@@ -352,10 +352,10 @@ app:
           To use a debug build, append the tag to the Docker image name, e.g.:
 
           ```
-          docker run [OPTIONS...] jlesage/{{ app.name }}:v1.14.3-debug
+          docker run [OPTIONS...] uranite/{{ app.name }}:v1.14.3-debug
           ```
 
-          [Docker Hub]: https://hub.docker.com/r/jlesage/{{ app.name }}/tags/
+          [Docker Hub]: https://hub.docker.com/r/uranite/{{ app.name }}/tags/
       - title: unRAID
         level: 3
         content: |-

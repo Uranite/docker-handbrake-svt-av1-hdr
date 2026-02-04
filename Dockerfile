@@ -1,7 +1,7 @@
 #
 # handbrake Dockerfile
 #
-# https://github.com/jlesage/docker-handbrake
+# https://github.com/uranite/docker-handbrake-svt-av1-hdr
 #
 
 # Docker image version is provided via build arg.
@@ -181,5 +181,5 @@ LABEL \
       org.label-schema.name="handbrake" \
       org.label-schema.description="Docker container for HandBrake" \
       org.label-schema.version="${DOCKER_IMAGE_VERSION:-}" \
-      org.label-schema.vcs-url="https://github.com/jlesage/docker-handbrake" \
+      org.label-schema.vcs-url="https://github.com/uranite/docker-handbrake-svt-av1-hdr" \
       org.label-schema.schema-version="1.0"
