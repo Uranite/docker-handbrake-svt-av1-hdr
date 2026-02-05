@@ -48,7 +48,7 @@ jobs:
           # Determine the version to put in container label.
           LABEL_VERSION="$VERSION"
           # Determine the Docker container tags.
-          TAGS="${{ env.DOCKER_IMAGE_NAME }}:${VERSION},${{ env.DOCKER_IMAGE_NAME }}:nightly-latest"
+          TAGS="${{ env.DOCKER_IMAGE_NAME }}:${VERSION},${{ env.DOCKER_IMAGE_NAME }}:latest"
           # Determine if a build is needed.
           if curl --silent -f "https://hub.docker.com/v2/repositories/${{ env.DOCKER_IMAGE_NAME }}/tags/${VERSION}/" > /dev/null
           then
