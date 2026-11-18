@@ -80,9 +80,13 @@ jobs:
               RELEASE_TYPE="n/a"
           fi
           # Determine the Docker cache image.
+          # NOTE: Registry references must be lowercase, but the repository
+          # owner can contain uppercase characters.
+          owner="$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')"
           name="${GITHUB_REPOSITORY#*/}"
           name="${name#docker-}"
-          CACHE_IMAGE="ghcr.io/${GITHUB_REPOSITORY_OWNER}/${name}:buildcache"
+          name="$(echo "${name}" | tr '[:upper:]' '[:lower:]')"
+          CACHE_IMAGE="ghcr.io/${owner}/${name}:buildcache"
           # Print results.
           echo "::group::Results"
           echo "Github reference: $GITHUB_REF"
