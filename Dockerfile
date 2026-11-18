@@ -1,14 +1,14 @@
 #
 # handbrake Dockerfile
 #
-# https://github.com/jlesage/docker-handbrake
+# https://github.com/Uranite/docker-handbrake-svt-av1-hdr
 #
 
 # Docker image version is provided via build arg.
 ARG DOCKER_IMAGE_VERSION=
 
 # Define software versions.
-ARG HANDBRAKE_VERSION=1.11.2
+ARG HANDBRAKE_VERSION=master
 ARG LIBVA_VERSION=2.23.0
 ARG INTEL_VAAPI_DRIVER_VERSION=2.4.1
 ARG GMMLIB_VERSION=22.9.0
@@ -18,7 +18,7 @@ ARG INTEL_ONEVPL_GPU_RUNTIME_VERSION=25.4.6
 ARG CPU_FEATURES_VERSION=0.11.0
 
 # Define software download URLs.
-ARG HANDBRAKE_URL=https://github.com/HandBrake/HandBrake/releases/download/${HANDBRAKE_VERSION}/HandBrake-${HANDBRAKE_VERSION}-source.tar.bz2
+ARG HANDBRAKE_URL=https://github.com/HandBrake/HandBrake.git
 ARG LIBVA_URL=https://github.com/intel/libva/releases/download/${LIBVA_VERSION}/libva-${LIBVA_VERSION}.tar.bz2
 ARG INTEL_VAAPI_DRIVER_URL=https://github.com/intel/intel-vaapi-driver/releases/download/${INTEL_VAAPI_DRIVER_VERSION}/intel-vaapi-driver-${INTEL_VAAPI_DRIVER_VERSION}.tar.bz2
 ARG GMMLIB_URL=https://github.com/intel/gmmlib/archive/intel-gmmlib-${GMMLIB_VERSION}.tar.gz
@@ -34,7 +34,7 @@ ARG HANDBRAKE_DEBUG_MODE=none
 FROM --platform=$BUILDPLATFORM tonistiigi/xx AS xx
 
 # Build HandBrake.
-FROM --platform=$BUILDPLATFORM alpine:3.20 AS handbrake
+FROM --platform=$BUILDPLATFORM alpine:edge AS handbrake
 ARG TARGETPLATFORM
 ARG HANDBRAKE_VERSION
 ARG HANDBRAKE_URL
@@ -47,7 +47,7 @@ ARG INTEL_MEDIA_SDK_URL
 ARG INTEL_ONEVPL_GPU_RUNTIME_URL
 COPY --from=xx / /
 COPY src/handbrake /build
-RUN /build/build.sh \
+RUN sed -i 's/\r$//' /build/build.sh && /build/build.sh \
     "$HANDBRAKE_VERSION" \
     "$HANDBRAKE_URL" \
     "$HANDBRAKE_DEBUG_MODE" \
@@ -62,18 +62,17 @@ RUN xx-verify \
     /tmp/handbrake-install/usr/bin/HandBrakeCLI
 
 # Build cpu_features.
-FROM --platform=$BUILDPLATFORM alpine:3.20 AS cpu_features
+FROM --platform=$BUILDPLATFORM alpine:edge AS cpu_features
 ARG TARGETPLATFORM
 ARG CPU_FEATURES_URL
 COPY --from=xx / /
 COPY src/cpu_features /build
-RUN /build/build.sh "$CPU_FEATURES_URL"
+RUN sed -i 's/\r$//' /build/build.sh && /build/build.sh "$CPU_FEATURES_URL"
 RUN xx-verify /tmp/cpu_features-install/bin/list_cpu_features
 
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.20-v4.14.0
+FROM jlesage/baseimage-gui:alpine-3.24-v4.14.0
 
-ARG HANDBRAKE_VERSION
 ARG DOCKER_IMAGE_VERSION
 
 # Define working directory.
@@ -134,12 +133,13 @@ RUN \
 # Add files.
 COPY rootfs/ /
 COPY --from=handbrake /tmp/handbrake-install /
+COPY --from=handbrake /tmp/handbrake-version /tmp/handbrake-version
 COPY --from=cpu_features /tmp/cpu_features-install/bin/list_cpu_features /usr/bin/
 
 # Set internal environment variables.
 RUN \
     set-cont-env APP_NAME "HandBrake" && \
-    set-cont-env APP_VERSION "$HANDBRAKE_VERSION" && \
+    set-cont-env APP_VERSION "$(cat /tmp/handbrake-version)" && \
     set-cont-env DOCKER_IMAGE_VERSION "$DOCKER_IMAGE_VERSION" && \
     set-cont-env DISABLE_GLX 1 && \
     true
@@ -181,5 +181,5 @@ LABEL \
       org.label-schema.name="handbrake" \
       org.label-schema.description="Docker container for HandBrake" \
       org.label-schema.version="${DOCKER_IMAGE_VERSION:-}" \
-      org.label-schema.vcs-url="https://github.com/jlesage/docker-handbrake" \
+      org.label-schema.vcs-url="https://github.com/Uranite/docker-handbrake-svt-av1-hdr" \
       org.label-schema.schema-version="1.0"

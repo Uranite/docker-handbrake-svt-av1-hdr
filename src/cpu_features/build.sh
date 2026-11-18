@@ -30,7 +30,7 @@ fi
 #
 apk --no-cache add \
     curl \
-    clang17 \
+    clang23 \
     make \
     cmake \
 

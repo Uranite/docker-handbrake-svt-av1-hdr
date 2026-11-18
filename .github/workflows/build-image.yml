@@ -5,18 +5,18 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  DOCKER_IMAGE_NAME: jlesage/handbrake
+  DOCKER_IMAGE_NAME: uranite/handbrake-svt-av1-hdr
   PLATFORMS: linux/amd64
 
 on:
   push:
     branches:
-      - '*'
-      - '!nightly'
+      - master
     tags:
-      - v[0-9][0-9].[0-9][0-9].[0-9]+
-      - v[0-9][0-9].[0-9][0-9].[0-9]+-pre.[0-9]+
+      - v[0-9]+.[0-9]+.[0-9]+
+      - v[0-9]+.[0-9]+.[0-9]+-pre.[0-9]+
   pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,9 +25,9 @@ jobs:
 
     steps:
       - name: Free disk space
-        uses: jlumbroso/free-disk-space@main
+        uses: jlumbroso/free-disk-space@v2
         with:
-          tool-cache: true
+          preinstalled-runtimes: true
           android: true
           dotnet: true
           haskell: true
@@ -63,10 +63,12 @@ jobs:
           TAGS="${{ env.DOCKER_IMAGE_NAME }}:${VERSION}"
           if [[ $GITHUB_REF =~ refs/tags/* ]]; then
             TAGS="$TAGS,${{ env.DOCKER_IMAGE_NAME }}:latest"
+          elif [[ $GITHUB_REF == refs/heads/master ]]; then
+            TAGS="$TAGS,${{ env.DOCKER_IMAGE_NAME }}:latest"
           fi
           TAGS="$TAGS,$(echo $TAGS | tr ',' '\n' | sed 's|^|ghcr.io/|' | tr '\n' ',')"
           # Determine the release type.
-          if [[ $GITHUB_REF =~ refs/tags/* ]]; then
+          if [[ $GITHUB_REF =~ refs/tags/* ]] || [[ $GITHUB_REF == refs/heads/master ]]; then
               IS_RELEASE=yes
               if [[ $GITHUB_REF =~ -pre\.[0-9]+ ]]; then
                   RELEASE_TYPE="pre"
@@ -123,7 +125,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           push: ${{ steps.prep.outputs.is_release == 'yes' }}
           provenance: false
@@ -134,52 +136,20 @@ jobs:
           cache-from: type=registry,ref=${{ env.CACHE_IMAGE }}
           cache-to: ${{ github.ref == 'refs/heads/master' && format('type=registry,ref={0},mode=max', env.CACHE_IMAGE) || '' }}
 
-      - name: Build and push (debug version)
-        uses: docker/build-push-action@v4
-        with:
-          push: ${{ steps.prep.outputs.is_release == 'yes' }}
-          provenance: false
-          platforms: ${{ env.PLATFORMS }}
-          tags: ${{ env.DOCKER_IMAGE_NAME }}:${{ steps.prep.outputs.version }}-debug
-          build-args: |
-            DOCKER_IMAGE_VERSION=${{ steps.prep.outputs.label_version }}-debug
-            HANDBRAKE_DEBUG_MODE=max
-          cache-from: type=registry,ref=${{ env.CACHE_IMAGE }}
-          cache-to: ${{ github.ref == 'refs/heads/master' && format('type=registry,ref={0},mode=max', env.CACHE_IMAGE) || '' }}
-
       - name: Inspect
         if: ${{ steps.prep.outputs.is_release == 'yes' }}
         run: |
           docker buildx imagetools inspect ${{ env.DOCKER_IMAGE_NAME }}:${{ steps.prep.outputs.version }}
 
-      - name: Inspect (debug version)
-        if: ${{ steps.prep.outputs.is_release == 'yes' }}
-        run: |
-          docker buildx imagetools inspect ${{ env.DOCKER_IMAGE_NAME }}:${{ steps.prep.outputs.version }}-debug
-
       - name: Checkout
-        uses: actions/checkout@v6
-        if: ${{ steps.prep.outputs.release_type == 'standard' }}
+        uses: actions/checkout@v7
+        if: ${{ steps.prep.outputs.release_type == 'standard' || github.ref == 'refs/heads/master' }}
 
       - name: Dockerhub description
         if: ${{ steps.prep.outputs.release_type == 'standard' }}
-        uses: peter-evans/dockerhub-description@v4
+        uses: peter-evans/dockerhub-description@v5
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           repository: ${{ env.DOCKER_IMAGE_NAME }}
           readme-filepath: DOCKERHUB.md
-
-  notification:
-    name: Notification
-    needs: [ build ]
-    runs-on: ubuntu-22.04
-    if: ${{ always() && github.event_name != 'pull_request' }}
-
-    steps:
-      - name: Pushover notification
-        uses: desiderati/github-action-pushover@v1
-        with:
-          job-status: ${{ needs.build.result }}
-          pushover-api-token: ${{ secrets.PUSHOVER_API_TOKEN }}
-          pushover-user-key: ${{ secrets.PUSHOVER_USER_KEY }}

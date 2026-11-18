@@ -148,8 +148,8 @@ apk --no-cache add \
     curl \
     binutils \
     git \
-    clang17 \
-    llvm17 \
+    clang23 \
+    llvm23 \
     make \
     cmake \
     pkgconf \
@@ -173,7 +173,6 @@ apk --no-cache add \
 
 xx-apk --no-cache --no-scripts add \
     musl-dev \
-    gcc \
     g++ \
     linux-headers \
 
@@ -215,9 +214,6 @@ if $USE_RUST_FROM_ALPINE_REPO; then
         cargo \
         cargo-c
 else
-    apk --no-cache add \
-        gcc \
-        musl-dev
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
     source /root/.cargo/env
 
@@ -269,14 +265,25 @@ fi
 
 log "Downloading HandBrake sources..."
 if echo "${HANDBRAKE_URL}" | grep -q '\.git$'; then
-    # Sources from git for nightly builds.
+    # Sources from git.
     git clone ${HANDBRAKE_URL} /tmp/handbrake
-    # HANDBRAKE_VERSION is in the format "nightly-<date>-<commit hash>".
-    git -C /tmp/handbrake checkout "$(echo "${HANDBRAKE_VERSION}" | cut -d'-' -f3)"
+    if echo "${HANDBRAKE_VERSION}" | grep -q '^nightly-'; then
+        # HANDBRAKE_VERSION is in the format "nightly-<date>-<commit hash>".
+        git -C /tmp/handbrake checkout "$(echo "${HANDBRAKE_VERSION}" | cut -d'-' -f3)"
+    else
+        # HANDBRAKE_VERSION is a branch, tag or commit.
+        git -C /tmp/handbrake checkout "${HANDBRAKE_VERSION}"
+        # Resolve the actual version, so it can be used in the container label.
+        HANDBRAKE_COMMIT="$(git -C /tmp/handbrake rev-parse --short=10 HEAD)"
+        HANDBRAKE_COMMIT_DATE="$(git -C /tmp/handbrake show -s --format=%cd --date=format:%Y%m%d%H%M%S HEAD)"
+        HANDBRAKE_VERSION="nightly-${HANDBRAKE_COMMIT_DATE}-${HANDBRAKE_COMMIT}"
+    fi
+    log "HandBrake version: ${HANDBRAKE_VERSION}"
 else
     mkdir /tmp/handbrake
     curl -# -L -f ${HANDBRAKE_URL} | tar xj --strip 1 -C /tmp/handbrake
 fi
+echo "${HANDBRAKE_VERSION}" > /tmp/handbrake-version
 
 #
 # Compile HandBrake.
@@ -457,6 +464,17 @@ if xx-info is-cross; then
     patch -d /tmp/handbrake -p1 < "$SCRIPT_DIR"/cross-compile-fix.patch
 fi
 patch -d /tmp/handbrake -p1 < "$SCRIPT_DIR"/maximized-window.patch
+
+if [ -d "$SCRIPT_DIR/patches" ]; then
+    log "Applying SVT-AV1-HDR patches..."
+    for patch in "$SCRIPT_DIR"/patches/*.patch; do
+        if [ -f "$patch" ]; then
+            log "Applying patch: $(basename "$patch")"
+            # Strip CR characters, in case the sources were checked out on Windows.
+            sed 's/\r$//' "$patch" | patch -t -N -p1 -d /tmp/handbrake || exit 1
+        fi
+    done
+fi
 
 # Create the meson cross compile config file.
 if xx-info is-cross; then

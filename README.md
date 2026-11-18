@@ -1,13 +1,22 @@
-# Docker container for HandBrake
-[![Release](https://img.shields.io/github/release/jlesage/docker-handbrake.svg?logo=github&style=for-the-badge)](https://github.com/jlesage/docker-handbrake/releases/latest)
-[![Docker Image Size](https://img.shields.io/docker/image-size/jlesage/handbrake/latest?logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake/tags)
-[![Docker Pulls](https://img.shields.io/docker/pulls/jlesage/handbrake?label=Pulls&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake)
-[![Docker Stars](https://img.shields.io/docker/stars/jlesage/handbrake?label=Stars&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/jlesage/docker-handbrake/build-image.yml?logo=github&branch=master&style=for-the-badge)](https://github.com/jlesage/docker-handbrake/actions/workflows/build-image.yml)
+# Docker container for HandBrake (SVT-AV1-HDR)
+[![Release](https://img.shields.io/github/release/Uranite/docker-handbrake-svt-av1-hdr.svg?logo=github&style=for-the-badge)](https://github.com/Uranite/docker-handbrake-svt-av1-hdr/releases/latest)
+[![Docker Image Size](https://img.shields.io/docker/image-size/uranite/handbrake-svt-av1-hdr/latest?logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr/tags)
+[![Docker Pulls](https://img.shields.io/docker/pulls/uranite/handbrake-svt-av1-hdr?label=Pulls&logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr)
+[![Docker Stars](https://img.shields.io/docker/stars/uranite/handbrake-svt-av1-hdr?label=Stars&logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Uranite/docker-handbrake-svt-av1-hdr/build-image.yml?logo=github&branch=master&style=for-the-badge)](https://github.com/Uranite/docker-handbrake-svt-av1-hdr/actions/workflows/build-image.yml)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge)](https://paypal.me/JocelynLeSage)
 
 This project provides a lightweight and secure Docker container for
 [HandBrake](https://handbrake.fr).
+
+> [!IMPORTANT]
+> This is a fork of [jlesage/docker-handbrake](https://github.com/jlesage/docker-handbrake)
+> that replaces HandBrake's bundled SVT-AV1 encoder with
+> [SVT-AV1-HDR](https://github.com/juliobbv-p/SVT-AV1-HDR), a fork of SVT-AV1
+> with perceptual enhancements for psychovisually optimal SDR and HDR AV1
+> encoding. It targets the best perceptual quality, with extra optimizations
+> for HDR content and film grain (PQ-optimized variance boost, film grain tune,
+> 4:4:4 support, extended CRF, and tuned defaults).
 
 Access the application's full graphical interface directly from any modern web
 browser - no downloads, installs, or setup required on the client side - or
@@ -77,8 +86,6 @@ of modern, widely supported codecs.
    * [Intel Quick Sync Video](#intel-quick-sync-video)
       * [unRAID](#unraid-1)
    * [Nightly Builds](#nightly-builds)
-   * [Debug Builds](#debug-builds)
-      * [unRAID](#unraid-2)
    * [Support or Contact](#support-or-contact)
 
 ## Quick Start
@@ -97,7 +104,7 @@ docker run -d \
     -v /home/user:/storage:ro \
     -v /home/user/HandBrake/watch:/watch:rw \
     -v /home/user/HandBrake/output:/output:rw \
-    jlesage/handbrake
+    uranite/handbrake-svt-av1-hdr
 ```
 
 Where:
@@ -118,7 +125,7 @@ docker run [-d] \
     [-e <VARIABLE_NAME>=<VALUE>]... \
     [-v <HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]]... \
     [-p <HOST_PORT>:<CONTAINER_PORT>]... \
-    jlesage/handbrake
+    uranite/handbrake-svt-av1-hdr
 ```
 
 | Parameter | Description |
@@ -296,7 +303,7 @@ included in this example.
 ```yaml
 services:
   handbrake:
-    image: jlesage/handbrake
+    image: uranite/handbrake-svt-av1-hdr
     ports:
       - "5800:5800"
     volumes:
@@ -323,8 +330,8 @@ where:
 View all available tags on [Docker Hub] or check the [Releases] page for version
 details.
 
-[Releases]: https://github.com/jlesage/docker-handbrake/releases
-[Docker Hub]: https://hub.docker.com/r/jlesage/handbrake/tags
+[Releases]: https://github.com/Uranite/docker-handbrake-svt-av1-hdr/releases
+[Docker Hub]: https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr/tags
 
 ## Docker Image Update
 
@@ -343,7 +350,7 @@ To manually update the Docker image, follow these steps:
 
   1. Fetch the latest image:
 ```shell
-docker pull jlesage/handbrake
+docker pull uranite/handbrake-svt-av1-hdr
 ```
 
   2. Stop the container:
@@ -367,7 +374,7 @@ For Synology NAS users, follow these steps to update a container image:
 
   1.  Open the *Docker* application.
   2.  Click *Registry* in the left pane.
-  3.  In the search bar, type the name of the container (`jlesage/handbrake`).
+  3.  In the search bar, type the name of the container (`uranite/handbrake-svt-av1-hdr`).
   4.  Select the image, click *Download*, and choose the `latest` tag.
   5.  Wait for the download to complete. A notification will appear once done.
   6.  Click *Container* in the left pane.
@@ -1180,63 +1187,15 @@ To use a nightly build, append the tag to the Docker image name during container
 creation, e.g.:
 
 ```
-docker run [OPTIONS...] jlesage/handbrake:nightly-latest
+docker run [OPTIONS...] uranite/handbrake-svt-av1-hdr:nightly-latest
 ```
 
 [Git repository]: https://github.com/HandBrake/HandBrake
-[Docker Hub]: https://hub.docker.com/r/jlesage/handbrake/tags/
-
-## Debug Builds
-
-Debug builds are used to investigate issues with HandBrake. They
-are compiled in debug mode with all symbols retained, primarily for debugging
-crashes.
-
-To generate a core dump when HandBrake crashes, two requirements
-must be met:
-  1. Enable core dumps by setting the maximum core size using the
-     `--ulimit core=-1` parameter in the `docker run` command (`-1` means
-     unlimited).
-  2. Set the core dump location on the host with:
-
-     ```
-     echo 'CORE_PATTERN' | sudo tee /proc/sys/kernel/core_pattern
-     ```
-
-     Replace `CORE_PATTERN` with a template for naming core dump files. For
-     example, to store core dumps in the container’s configuration volume (for
-     easy host access), use `/config/core.%e.%t`.
-
-> [!NOTE]
-> Core dump files contain the application’s complete memory layout and are
-> created with restrictive permissions. To allow access by a user other than the
-> one running HandBrake, run `chmod a+r CORE`, where `CORE` is the
-> path to the core file.
-
-> [!NOTE]
-> The core dump pattern is shared between the host and container. Revert to the
-> original pattern after debugging by checking the current pattern with
-> `cat /proc/sys/kernel/core_pattern`.
-
-Debug builds are available via Docker image tags with a `debug` suffix. Check
-available tags on [Docker Hub].
-
-To use a debug build, append the tag to the Docker image name, e.g.:
-
-```
-docker run [OPTIONS...] jlesage/handbrake:v1.14.3-debug
-```
-
-[Docker Hub]: https://hub.docker.com/r/jlesage/handbrake/tags/
-
-### unRAID
-
-On unRAID systems, add the `--ulimit core=-1` parameter to the
-`Extra Parameters` field in the container settings.
+[Docker Hub]: https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr/tags/
 
 ## Support or Contact
 
 Having troubles with the container or have questions? Please
-[create a new issue](https://github.com/jlesage/docker-handbrake/issues).
+[create a new issue](https://github.com/Uranite/docker-handbrake-svt-av1-hdr/issues).
 
 For other Dockerized applications, visit https://jlesage.github.io/docker-apps.

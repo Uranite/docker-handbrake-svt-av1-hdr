@@ -1,14 +1,22 @@
-# Docker container for HandBrake
-[![Release](https://img.shields.io/github/release/jlesage/docker-handbrake.svg?logo=github&style=for-the-badge)](https://github.com/jlesage/docker-handbrake/releases/latest)
-[![Docker Image Size](https://img.shields.io/docker/image-size/jlesage/handbrake/latest?logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake/tags)
-[![Docker Pulls](https://img.shields.io/docker/pulls/jlesage/handbrake?label=Pulls&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake)
-[![Docker Stars](https://img.shields.io/docker/stars/jlesage/handbrake?label=Stars&logo=docker&style=for-the-badge)](https://hub.docker.com/r/jlesage/handbrake)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/jlesage/docker-handbrake/build-image.yml?logo=github&branch=master&style=for-the-badge)](https://github.com/jlesage/docker-handbrake/actions/workflows/build-image.yml)
-[![Source](https://img.shields.io/badge/Source-GitHub-blue?logo=github&style=for-the-badge)](https://github.com/jlesage/docker-handbrake)
+# Docker container for HandBrake (SVT-AV1-HDR)
+[![Release](https://img.shields.io/github/release/Uranite/docker-handbrake-svt-av1-hdr.svg?logo=github&style=for-the-badge)](https://github.com/Uranite/docker-handbrake-svt-av1-hdr/releases/latest)
+[![Docker Image Size](https://img.shields.io/docker/image-size/uranite/handbrake-svt-av1-hdr/latest?logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr/tags)
+[![Docker Pulls](https://img.shields.io/docker/pulls/uranite/handbrake-svt-av1-hdr?label=Pulls&logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr)
+[![Docker Stars](https://img.shields.io/docker/stars/uranite/handbrake-svt-av1-hdr?label=Stars&logo=docker&style=for-the-badge)](https://hub.docker.com/r/uranite/handbrake-svt-av1-hdr)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Uranite/docker-handbrake-svt-av1-hdr/build-image.yml?logo=github&branch=master&style=for-the-badge)](https://github.com/Uranite/docker-handbrake-svt-av1-hdr/actions/workflows/build-image.yml)
+[![Source](https://img.shields.io/badge/Source-GitHub-blue?logo=github&style=for-the-badge)](https://github.com/Uranite/docker-handbrake-svt-av1-hdr)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg?style=for-the-badge)](https://paypal.me/JocelynLeSage)
 
 This project provides a lightweight and secure Docker container for
 [HandBrake](https://handbrake.fr).
+
+> **Note:** This is a fork of [jlesage/docker-handbrake](https://github.com/jlesage/docker-handbrake)
+> that replaces HandBrake's bundled SVT-AV1 encoder with
+> [SVT-AV1-HDR](https://github.com/juliobbv-p/SVT-AV1-HDR), a fork of SVT-AV1
+> with perceptual enhancements for psychovisually optimal SDR and HDR AV1
+> encoding. It targets the best perceptual quality, with extra optimizations
+> for HDR content and film grain (PQ-optimized variance boost, film grain tune,
+> 4:4:4 support, extended CRF, and tuned defaults).
 
 Access the application's full graphical interface directly from any modern web
 browser - no downloads, installs, or setup required on the client side - or
@@ -48,7 +56,7 @@ docker run -d \
     -v /home/user:/storage:ro \
     -v /home/user/HandBrake/watch:/watch:rw \
     -v /home/user/HandBrake/output:/output:rw \
-    jlesage/handbrake
+    uranite/handbrake-svt-av1-hdr
 ```
 
 Where:
@@ -63,11 +71,11 @@ Files from the host appear under the `/storage` folder in the container.
 
 ## Documentation
 
-Full documentation is available at https://github.com/jlesage/docker-handbrake.
+Full documentation is available at https://github.com/Uranite/docker-handbrake-svt-av1-hdr.
 
 ## Support or Contact
 
 Having troubles with the container or have questions? Please
-[create a new issue](https://github.com/jlesage/docker-handbrake/issues).
+[create a new issue](https://github.com/Uranite/docker-handbrake-svt-av1-hdr/issues).
 
 For other Dockerized applications, visit https://jlesage.github.io/docker-apps.

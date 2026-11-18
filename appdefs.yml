@@ -308,59 +308,11 @@ app:
           creation, e.g.:
 
           ```
-          docker run [OPTIONS...] jlesage/{{ app.name }}:nightly-latest
+          docker run [OPTIONS...] uranite/{{ app.name }}:nightly-latest
           ```
 
           [Git repository]: https://github.com/HandBrake/HandBrake
-          [Docker Hub]: https://hub.docker.com/r/jlesage/{{ app.name }}/tags/
-      - title: Debug Builds
-        level: 2
-        content: |-
-          Debug builds are used to investigate issues with {{ app.friendly_name }}. They
-          are compiled in debug mode with all symbols retained, primarily for debugging
-          crashes.
-
-          To generate a core dump when {{ app.friendly_name }} crashes, two requirements
-          must be met:
-            1. Enable core dumps by setting the maximum core size using the
-               `--ulimit core=-1` parameter in the `docker run` command (`-1` means
-               unlimited).
-            2. Set the core dump location on the host with:
-
-               ```
-               echo 'CORE_PATTERN' | sudo tee /proc/sys/kernel/core_pattern
-               ```
-
-               Replace `CORE_PATTERN` with a template for naming core dump files. For
-               example, to store core dumps in the container’s configuration volume (for
-               easy host access), use `/config/core.%e.%t`.
-
-          > [!NOTE]
-          > Core dump files contain the application’s complete memory layout and are
-          > created with restrictive permissions. To allow access by a user other than the
-          > one running {{ app.friendly_name }}, run `chmod a+r CORE`, where `CORE` is the
-          > path to the core file.
-
-          > [!NOTE]
-          > The core dump pattern is shared between the host and container. Revert to the
-          > original pattern after debugging by checking the current pattern with
-          > `cat /proc/sys/kernel/core_pattern`.
-
-          Debug builds are available via Docker image tags with a `debug` suffix. Check
-          available tags on [Docker Hub].
-
-          To use a debug build, append the tag to the Docker image name, e.g.:
-
-          ```
-          docker run [OPTIONS...] jlesage/{{ app.name }}:v1.14.3-debug
-          ```
-
-          [Docker Hub]: https://hub.docker.com/r/jlesage/{{ app.name }}/tags/
-      - title: unRAID
-        level: 3
-        content: |-
-          On unRAID systems, add the `--ulimit core=-1` parameter to the
-          `Extra Parameters` field in the container settings.
+          [Docker Hub]: https://hub.docker.com/r/uranite/{{ app.name }}/tags/
   changelog:
     - version: 26.09.1
       date: 2026-09-22
