@@ -365,11 +365,15 @@ if [ "$(xx-info arch)" = "amd64" ]; then
     rm -rf /tmp/gmmlib/ULT
     rm -rf /tmp/intel-media-driver/media_driver/*/ult
 
+    # NOTE: The Intel components still declare cmake_minimum_required()
+    #       versions older than 3.5, which CMake 4 (shipped by Alpine edge)
+    #       rejects.  CMAKE_POLICY_VERSION_MINIMUM keeps them configurable.
     log "Configuring Intel Media driver..."
     (
         mkdir /tmp/intel-media-driver/build && \
         cd /tmp/intel-media-driver/build && cmake -G Ninja \
             $(xx-clang --print-cmake-defines) \
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
             -DCMAKE_FIND_ROOT_PATH=$(xx-info sysroot) \
             -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
             -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
@@ -410,6 +414,7 @@ if [ "$(xx-info arch)" = "amd64" ]; then
         mkdir /tmp/MediaSDK/build && \
         cd /tmp/MediaSDK/build && cmake \
             $(xx-clang --print-cmake-defines) \
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
             -DCMAKE_FIND_ROOT_PATH=$(xx-info sysroot) \
             -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
             -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
@@ -441,6 +446,7 @@ if [ "$(xx-info arch)" = "amd64" ]; then
         mkdir /tmp/oneVPL-intel-gpu/build && \
         cd /tmp/oneVPL-intel-gpu/build && cmake -G Ninja \
             $(xx-clang --print-cmake-defines) \
+            -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
             -DCMAKE_FIND_ROOT_PATH=$(xx-info sysroot) \
             -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
             -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
