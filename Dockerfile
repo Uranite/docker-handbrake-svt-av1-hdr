@@ -133,6 +133,7 @@ RUN \
 # Add files.
 COPY rootfs/ /
 COPY --from=handbrake /tmp/handbrake-install /
+COPY --from=handbrake /usr/lib/libvpx.so.* /usr/lib/
 COPY --from=handbrake /tmp/handbrake-version /tmp/handbrake-version
 COPY --from=cpu_features /tmp/cpu_features-install/bin/list_cpu_features /usr/bin/
 
